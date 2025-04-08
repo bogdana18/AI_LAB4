@@ -2,16 +2,16 @@ import asyncio
 import aiohttp
 import logging
 
-from aiogram import Bot, Dispatcher, types
-from aiogram.enums import ParseMode, ContentType
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command
 from aiogram import Router
+from handlers.media import media
 
 from config import BOT_TOKEN, OPEN_WEATHER_MAP
 from db import add_order, get_orders_by_user
@@ -81,6 +81,10 @@ async def process_callback_get_rate(callback_query: types.CallbackQuery):
 async def cmd_weather(message: types.Message, state: FSMContext):
     await message.answer("Введіть назву міста, для якого хочете дізнатися погоду:")
     await state.set_state(WeatherState.waiting_for_city)
+
+@router.message(F.content_type.in_({"photo", "document", "audio", "video"}))
+async def handle_photo(message: types.Message):
+    await media(message)
 
 @router.message(WeatherState.waiting_for_city)
 async def process_city_input(message: types.Message, state: FSMContext):
