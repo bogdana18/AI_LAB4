@@ -1,0 +1,24 @@
+# Віртуальне середовище
+venv/
+.venv/
+
+# IDE (PyCharm / VSCode) файли
+.idea/
+.vscode/
+
+# База даних (SQLite)
+*.db
+
+# Файли конфігурації з токенами
+config.py
+.env
+
+# Кеші Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Інші тимчасові або системні файли
+*.log
+.DS_Store
